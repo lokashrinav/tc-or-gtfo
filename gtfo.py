@@ -3,6 +3,20 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+import openai
+
+conversation_history = [
+    {"role": "user", "content": "For the following messages, only reply YES or NO. You will designate the information as sensitive information, such as death of family, suicide, or anything of that level. Items such as Presidential Election, Getting Fired, Etc. are completely fine. IF UNDERSTOOD, REPLY WITH YES"}
+]
+
+from openai import OpenAI
+
+openai.api_key = "OPENAI-KEY-REPLACE"
+
+completion = openai.chat.completions.create(
+    model="gpt-4o",
+    messages=conversation_history
+)
 
 driver = webdriver.Chrome()
 
@@ -46,18 +60,28 @@ for link in list1:
     
     text = driver.find_element(By.CSS_SELECTOR, '.break-words').text
     if 'tc' not in text.lower():
-        text = driver.find_element(By.CSS_SELECTOR, 'textarea')
-        text.send_keys("TC or GTFO")
-        
-        buttons = driver.find_elements(By.CSS_SELECTOR, '.inline-flex.items-center.justify-center.text-sm.font-semibold.transition-colors.bg-black')
-        
-        time.sleep(5)
-        
-        for elem in buttons:
-            if elem.text and elem.text == "Post":                                
-                elem.click()
-
+        conversation_history.append({"role": "user", "content": text})
+        completion = openai.chat.completions.create(
+            model="gpt-4", 
+            messages=conversation_history
+        )        
                 
+        response_message = completion.choices[0].message.content
+        print(response_message)
+        if response_message == "NO":
+            text = driver.find_element(By.CSS_SELECTOR, 'textarea')
+            text.send_keys("TC or GTFO")
+            
+            buttons = driver.find_elements(By.CSS_SELECTOR, '.inline-flex.items-center.justify-center.text-sm.font-semibold.transition-colors.bg-black')
+            
+            time.sleep(2)
+            
+            for elem in buttons:
+                if elem.text and elem.text.lower() == "post":                           
+                    elem.click()
+        else:
+            continue
+            
     driver.back()
         
 
