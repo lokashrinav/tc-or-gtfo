@@ -1,4 +1,4 @@
-# Blind TC Automation Script
+# Blind TC Automation Script AKA TC or GTFO!
 
 This Python script uses Selenium WebDriver to automate interaction with posts on [TeamBlind](https://www.teamblind.com). It logs in, gathers links from the feed, and comments "TC or GTFO" on posts that do not mention "tc".
 
