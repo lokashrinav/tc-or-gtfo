@@ -1,4 +1,3 @@
-```markdown
 # Blind TC Automation Script
 
 This Python script uses Selenium WebDriver to automate interaction with posts on [TeamBlind](https://www.teamblind.com). It logs in, gathers links from the feed, and comments "TC or GTFO" on posts that do not mention "tc".
@@ -64,4 +63,3 @@ This script is for educational purposes only. Be aware of the website's terms of
 ## License
 
 This project is licensed under the MIT License.
-```
